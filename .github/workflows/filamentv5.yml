@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - master
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 147.79.84.127
+          username: "u751029512.whatsapp"
+          password: "Rompero@64"
+
+      - name: 📝 Get commit message
+        id: commit_message
+        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+
+      - name: 📝 Notify success
+        if: success() # Esta condição garante que a notificação será enviada apenas se o deploy for bem-sucedido
+        run: |
+          curl -X POST https://recargahouse.com.br/api/depoloy-success \
+            -H "Content-Type: application/json" \
+            -d '{"status": "success", "message": "Deploy completed successfully!", "commit_message": "${{ env.COMMIT_MESSAGE }}"}'

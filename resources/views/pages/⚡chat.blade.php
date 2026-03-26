@@ -4,32 +4,22 @@ use Livewire\Component;
 
 new class extends Component
 {
-    public $contatos = [];
+    public $contatos;
+    public $contatoSelecionado;
 
-    public function mount()
+    public function mount($waId = null)
     {
+        if (!empty($waId)){
+            $this->contatoSelecionado = \App\Models\Contato::query()->where('wa_id', $waId)->first();
+        }
+
         $this->carregarMensagens();
     }
 
     public function carregarMensagens()
     {
-        $this->contatos = [
-            "555596869456" => [
-                "name" => "Andre junior wagner - pessoal",
-                "mensagens" => [
-                    "24-03-2026 13:49:50" => [
-                        "remetente" => "eu",
-                        "destinatario" => "555596869456",
-                        "mensagem" => "Olá, como voce está?",
-                    ],
-                    "24-03-2026 13:50:55" => [
-                        "remetente" => "555596869456",
-                        "destinatario" => "eu",
-                        "mensagem" => "Estou bem e voce?",
-                    ]
-                ]
-            ]
-        ];
+        $this->contatos = \App\Services\ContatosService::getUltimosContatos();
+
     }
 };
 ?>
@@ -54,9 +44,9 @@ new class extends Component
                                     @foreach($this->contatos as $contato)
                                         <li>
                                             <!-- Current: "bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white", Default: "text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5" -->
-                                            <a href="#" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold text-indigo-600 dark:bg-white/5 dark:text-white">
+                                            <a href="/contato/{{$contato->wa_id}}" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold @if(1 == 2) text-indigo-600 @endif dark:bg-white/5 dark:text-white">
 
-                                                {{ $contato['name'] }}
+                                                {{ $contato->name ?? $contato->wa_id }} - {{ $contato->wa_id }}
                                             </a>
                                         </li>
                                     @endforeach
@@ -93,7 +83,10 @@ new class extends Component
 
     <main class="py-10 lg:pl-72">
         <div class="px-4 sm:px-6 lg:px-8">
-            abc
+
+            @if(!empty($this->contatoSelecionado))
+                <livewire:feed :contatoSelecionado="$contatoSelecionado" />
+            @endif
         </div>
     </main>
 

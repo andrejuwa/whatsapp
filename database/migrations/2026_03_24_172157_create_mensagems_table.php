@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contatos', function (Blueprint $table) {
+        Schema::create('mensagems', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('wa_id')->unique();
+            $table->string('whatsapp_id')->unique();
+            $table->string('from');
+            $table->text('body');
+            $table->string('type');
+            $table->boolean('enviado');
+            $table->string('timestamp');
+            $table->string('whatsapp_context_id')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contatos');
+        Schema::dropIfExists('mensagems');
     }
 };
