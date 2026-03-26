@@ -237,5 +237,5 @@ window.Echo.channel('MensagemRecebidaWhatsapp')
         ul.appendChild(clone);
 
         // scroll automático
-        scrollFinalSemPerguntar();
+        scrollFinal();
     });
