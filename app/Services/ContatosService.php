@@ -35,7 +35,6 @@ class ContatosService
             })
             ->orderByDesc('last_message_timestamps.last_message_timestamp')
             ->select('contatos.*')
-            ->limit(10)
             ->get();
     }
 }
