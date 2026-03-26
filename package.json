@@ -20,6 +20,8 @@
         "lightningcss-linux-x64-gnu": "^1.29.1"
     },
     "devDependencies": {
-        "laravel-vite-plugin": "^3.0.0"
+        "laravel-echo": "^2.3.1",
+        "laravel-vite-plugin": "^3.0.0",
+        "pusher-js": "^8.4.3"
     }
 }
