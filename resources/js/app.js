@@ -1,5 +1,17 @@
 window._lastScrollCancel = 0;
 
+window.arquivar = function () {
+    const ul = document.querySelector('#listagemMensagem');
+    const ultimoLi = ul.lastElementChild;
+
+    if (ultimoLi) {
+        const liId = ultimoLi.id;
+        console.log(liId);
+
+        // redireciona para um link, por exemplo passando o id
+        window.location.href = `/arquivar/${liId}`;
+    }
+};
 window.scrollFinalSemPerguntar = function (element = null) {
     window.scrollTo({
         top: document.body.scrollHeight,
@@ -130,6 +142,8 @@ if (textarea && btnEnviar) {
 }
 const template = document.getElementById('templateMensagem');
 
+
+
 btnEnviar.addEventListener('click', async function () {
     const texto = textarea.value.trim();
     if (!texto) return;
@@ -138,9 +152,9 @@ btnEnviar.addEventListener('click', async function () {
     textarea.value = '';
     btnEnviar.style.display = 'none';
     autoResize(textarea);
-
+    let wa_id = document.getElementById('wa_id').value;
     try {
-        const response = await fetch('https://admin.recargahouse.site/api/api/whatsapp/enviarMensagem/555596869456', {
+        const response = await fetch('https://admin.recargahouse.site/api/api/whatsapp/enviarMensagem/'+wa_id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -185,57 +199,72 @@ textarea.addEventListener('keydown', function (e) {
 
 import './echo';
 
+window.atualizarFlow = async function (wa_id, status) {
+    try {
+        const response = await fetch(`https://admin.recargahouse.site/api/api/whatsapp/enviarMensagem/${wa_id}/${status}`, {
+            method: 'POST',
+        });
+        console.log(response)
+        alert('atualizado')
 
-window.Echo.channel('MensagemRecebidaWhatsapp')
-    .listen('MensagemRecebidaWhatsapp', (e) => {
-        const msg = e.message;
-        console.log(msg)
+    } catch (error) {
+        console.error('Erro ao atualizar flow:', error);
+    }
+};
 
-        const ul = document.querySelector('#listagemMensagem');
-        const template = document.getElementById('templateMensagem');
 
-        if (!ul || !template) return;
+window.echoMensagem = function (e) {
+    const msg = e.message;
 
-        // 🚫 evita duplicação
-        if (document.querySelector(`[data-id="${msg.message_id}"]`)) {
-            return;
-        }
+    const ul = document.querySelector('#listagemMensagem');
+    const template = document.getElementById('templateMensagem');
 
-        // clona template
-        const clone = template.content.cloneNode(true);
+    if (!ul || !template) return;
 
-        const mensagemBody = clone.querySelector('.mensagem-body');
-        const mensagemTime = clone.querySelector('.mensagem-time');
-        const wrapper = clone.querySelector('li'); // ou div principal
+    // 🚫 evita duplicação
+    if (document.querySelector(`[data-id="${msg.message_id}"]`)) {
+        return;
+    }
 
-        // seta id único
-        if (wrapper) {
-            wrapper.setAttribute('data-id', msg.message_id);
-        }
+    // clona template
+    const clone = template.content.cloneNode(true);
 
-        // conteúdo
-        if (msg.body_formatado) {
-            mensagemBody.innerHTML = msg.body_formatado;
-        } else {
-            mensagemBody.textContent = msg.body;
-        }
+    const mensagemBody = clone.querySelector('.mensagem-body');
+    const mensagemTime = clone.querySelector('.mensagem-time');
+    const wrapper = clone.querySelector('li'); // ou div principal
 
-        // data
-        const data = new Date(msg.timestamp * 1000);
-        mensagemTime.textContent = data.toLocaleString();
+    // seta id único
+    if (wrapper) {
+        wrapper.setAttribute('id', msg.message_id);
+    }
 
-        // 👇 REGRA PRINCIPAL AQUI
-        const isEnviado = msg.enviado === true || msg.enviado === 1 || msg.enviado === '1';
+    // conteúdo
+    if (msg.body_formatado) {
+        mensagemBody.innerHTML = msg.body_formatado;
+    } else {
+        mensagemBody.textContent = msg.body;
+    }
 
-        if (isEnviado) {
-            mensagemBody.classList.add('bg-green-100');
-        } else {
-            mensagemBody.classList.add('bg-gray-200');
-        }
+    // data
+    const data = new Date(msg.timestamp * 1000);
+    mensagemTime.textContent = data.toLocaleString();
 
-        // adiciona no DOM
-        ul.appendChild(clone);
+    // 👇 REGRA PRINCIPAL AQUI
+    const isEnviado = msg.enviado === true || msg.enviado === 1 || msg.enviado === '1';
 
-        // scroll automático
-        scrollFinal();
-    });
+    if (isEnviado) {
+        mensagemBody.classList.add('bg-green-100');
+    } else {
+        mensagemBody.classList.add('bg-gray-200');
+    }
+
+    // adiciona no DOM
+    ul.appendChild(clone);
+
+    // scroll automático
+    scrollFinal();
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+    scrollFinalSemPerguntar();
+});

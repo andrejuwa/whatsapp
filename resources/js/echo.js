@@ -13,3 +13,26 @@ window.Echo = new Echo({
     wssPort: import.meta.env.VITE_PUSHER_PORT,
     enabledTransports: ["ws", "wss"],
 });
+
+
+window.Echo.channel('MensagemRecebidaWhatsapp')
+    .listen('MensagemRecebidaWhatsapp', (e) => {
+        let wa_id = document.getElementById('wa_id').value;
+        if (e.message.from == wa_id) {
+            echoMensagem(e)
+        }else{
+            document.getElementById("contato_"+e.message.from).style = "";
+
+            if(e.message.enviado == true){
+
+                const span = document.getElementById("wa_id_"+e.message.from);
+
+
+                let valor = parseInt(span.textContent) || 0; // se estiver vazio, vira 0
+
+                valor += 1;
+                span.textContent = valor;
+            }
+        }
+
+    });

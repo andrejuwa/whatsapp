@@ -42,12 +42,29 @@ new class extends Component
                             <li>
                                 <ul role="list" class="-mx-2 space-y-1">
                                     @foreach($this->contatos as $contato)
-                                        <li>
+
+
+                                        @php
+                                            $bg = "bg-gray-50 dark:bg-white/5";
+                                            $hidden = "";
+                                            if (!empty($this->contatoSelecionado) && $this->contatoSelecionado->id == $contato->id){
+                                                $bg = "bg-green-500 dark:bg-white/5";
+                                            }
+
+                                            if ($contato->ultimaMensagem->mensagem_arquivada == 1){
+                                                $hidden = "display: none;";
+                                            }
+                                        @endphp
+                                        <li  class="group  gap-x-3 rounded-md {{$bg}} p-2 text-sm/6 font-semibold @if(1 == 2) text-indigo-600 @endif dark:text-white" style="{{ $hidden }}" id="contato_{{$contato->wa_id}}">
                                             <!-- Current: "bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white", Default: "text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5" -->
-                                            <a href="/contato/{{$contato->wa_id}}" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold @if(1 == 2) text-indigo-600 @endif dark:bg-white/5 dark:text-white">
+                                            <a href="/contato/{{$contato->wa_id}}" class="">
 
                                                 {{ $contato->name ?? $contato->wa_id }} - {{ $contato->wa_id }}
+                                                <span id="wa_id_{{ $contato->wa_id }}" class="bg-green-100">{{ $contato->mensagens_nao_lida == 0 ? "": $contato->mensagens_nao_lida }}</span>
                                             </a>
+                                            <span>
+                                                {{ \Illuminate\Support\Str::limit(preg_replace('/[^A-Za-z0-9 ]/', '', $contato->ultimaMensagem->body), 20) }}
+                                            </span>
                                         </li>
                                     @endforeach
                                 </ul>

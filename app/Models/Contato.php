@@ -11,11 +11,17 @@ class Contato extends Model
     protected $fillable = [
         'wa_id',
         'name',
+        'mensagem_arquivada',
     ];
 
     // RELACIONAMENTO
     public function mensagens()
     {
         return $this->hasMany(Mensagem::class, 'from', 'wa_id');
+    }
+
+    public function ultimaMensagem()
+    {
+        return $this->hasOne(Mensagem::class, 'from', 'wa_id')->latestOfMany('timestamp');
     }
 }

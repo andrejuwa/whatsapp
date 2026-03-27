@@ -19,6 +19,7 @@ class ContatosService
             DB::raw("MAX(STR_TO_DATE(mensagems.timestamp, '%d/%m/%Y %H:%i')) as last_message_timestamp")
         )
             ->join('mensagems', 'contatos.wa_id', '=', 'mensagems.from')
+//            ->where('flow_id', 'manual')
             ->groupBy('contatos.id')
             ->havingRaw("MAX(STR_TO_DATE(mensagems.timestamp, '%d/%m/%Y %H:%i')) >= ?", [$hojeMenos24h])
             ->toBase();
@@ -26,7 +27,7 @@ class ContatosService
         return Contato::query()
             ->with(['mensagens' => function ($query) {
                 $query->orderBy('timestamp', 'desc')->limit(50);
-            }])
+            },'ultimaMensagem'])
             ->whereHas('mensagens', function ($query) use ($hojeMenos24h) {
                 $query->whereRaw("STR_TO_DATE(timestamp, '%d/%m/%Y %H:%i') >= ?", [$hojeMenos24h]);
             })

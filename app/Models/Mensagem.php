@@ -16,6 +16,7 @@ class Mensagem extends Model
         'enviado',
         'timestamp',
         'whatsapp_context_id',
+        'flow_id',
     ];
 
     protected $casts = [

@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Http;
 
 class AtualizarRegistrosService
 {
+    public static function visualizarMensagens($wa_id)
+    {
+        $response = Http::post("https://admin.recargahouse.site/api/api/whatsapp/confirmacaoDeLeitura/{$wa_id}");
+    }
     public static function atualizarMensagens($whatsapp_id)
     {
         $response = Http::get("https://admin.recargahouse.site/api/api/whatsapp/mensagens/{$whatsapp_id}");
@@ -41,23 +45,25 @@ class AtualizarRegistrosService
         return count($mensagens);
     }
     public static function atualizarContatos(){
-        $response = Http::get('http://admin.recargahouse.site/api/api/whatsapp/contatos', [
-            'telefone' => '555596869456',
-        ]);
+        $response = Http::get('http://admin.recargahouse.site/api/api/whatsapp/contatos');
 
         $contatos = collect($response->json())
-            ->map(fn ($contato) => [
-                'wa_id' => $contato['wa_id'],
-                'name'  => $contato['name'] ?? null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ])
+            ->map(function ($contato){
+                return [
+                    'wa_id' => $contato['wa_id'],
+                    'name'  => $contato['name'],
+                    'flow_id'  => $contato['flow_id'],
+                    'mensagens_nao_lida'  => $contato['mensagens_nao_lida'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            } )
             ->toArray();
 
         Contato::query()->upsert(
             $contatos,
             ['wa_id'], // chave única
-            ['name', 'updated_at'] // campos que podem ser atualizados
+            ['name', 'updated_at', 'flow_id', 'mensagens_nao_lida'] // campos que podem ser atualizados
         );
 
     }
