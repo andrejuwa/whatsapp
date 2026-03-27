@@ -12,6 +12,11 @@ new class extends Component
         if (!empty($waId)){
             $this->contatoSelecionado = \App\Models\Contato::query()->where('wa_id', $waId)->first();
         }
+        \App\Services\AtualizarRegistrosService::atualizarContatos();
+
+        $ultimaMensagem = \App\Models\Mensagem::query()->latest()->first();
+
+        $total = \App\Services\AtualizarRegistrosService::atualizarMensagens($ultimaMensagem->whatsapp_id);
 
         $this->carregarMensagens();
     }
@@ -51,7 +56,13 @@ new class extends Component
                                                 $bg = "bg-green-500 dark:bg-white/5";
                                             }
 
-                                            if ($contato->ultimaMensagem->mensagem_arquivada == 1){
+                                            if (
+                                                $contato->ultimaMensagem->mensagem_arquivada == 1 ||
+                                                $contato->ultimaMensagem->body == "aviso_vencimento_net_1" ||
+                                                $contato->ultimaMensagem->body == "venda_produtos_1" ||
+                                                $contato->ultimaMensagem->body == "venda_produtos_2" ||
+                                                $contato->ultimaMensagem->body == "venda_produtos_3"
+                                                ){
                                                 $hidden = "display: none;";
                                             }
                                         @endphp

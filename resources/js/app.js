@@ -143,53 +143,58 @@ if (textarea && btnEnviar) {
 const template = document.getElementById('templateMensagem');
 
 
-
-btnEnviar.addEventListener('click', async function () {
-    const texto = textarea.value.trim();
-    if (!texto) return;
-
-    // limpa input IMEDIATO (UX boa)
-    textarea.value = '';
-    btnEnviar.style.display = 'none';
-    autoResize(textarea);
-    let wa_id = document.getElementById('wa_id').value;
-    try {
-        const response = await fetch('https://admin.recargahouse.site/api/api/whatsapp/enviarMensagem/'+wa_id, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-            },
-            body: JSON.stringify({
-                mensagem: texto
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Erro na API');
-        }
-
-        // ❗ NÃO faz mais nada aqui
-        // quem renderiza é o Echo
-
-    } catch (error) {
-        console.error(error);
-
-        // 👇 aqui você pode opcionalmente avisar o usuário
-        alert('Erro ao enviar mensagem');
-    }
-});
-textarea.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault(); // evita quebra de linha
-
-        const texto = this.value.trim();
+if (btnEnviar) {
+    btnEnviar.addEventListener('click', async function () {
+        const texto = textarea.value.trim();
         if (!texto) return;
 
-        btnEnviar.click(); // reaproveita tua lógica de envio
-    }
-});
+        // limpa input IMEDIATO (UX boa)
+        textarea.value = '';
+        btnEnviar.style.display = 'none';
+        autoResize(textarea);
+        let wa_id = document.getElementById('wa_id').value;
+        try {
+            const response = await fetch('https://admin.recargahouse.site/api/api/whatsapp/enviarMensagem/'+wa_id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                },
+                body: JSON.stringify({
+                    mensagem: texto
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro na API');
+            }
+
+            // ❗ NÃO faz mais nada aqui
+            // quem renderiza é o Echo
+
+        } catch (error) {
+            console.error(error);
+
+            // 👇 aqui você pode opcionalmente avisar o usuário
+            alert('Erro ao enviar mensagem');
+        }
+    });
+
+}
+if (textarea){
+
+    textarea.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // evita quebra de linha
+
+            const texto = this.value.trim();
+            if (!texto) return;
+
+            btnEnviar.click(); // reaproveita tua lógica de envio
+        }
+    });
+}
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

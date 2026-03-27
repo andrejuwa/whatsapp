@@ -17,11 +17,18 @@ window.Echo = new Echo({
 
 window.Echo.channel('MensagemRecebidaWhatsapp')
     .listen('MensagemRecebidaWhatsapp', (e) => {
-        let wa_id = document.getElementById('wa_id').value;
+        let wa_id = document.getElementById('wa_id');
+        if (wa_id) {
+            wa_id = wa_id.value
+        }
         if (e.message.from == wa_id) {
             echoMensagem(e)
         }else{
-            document.getElementById("contato_"+e.message.from).style = "";
+            const el = document.getElementById("contato_" + e.message.from);
+
+            if (el) {
+                el.style = "";
+            }
 
             if(e.message.enviado == true){
 

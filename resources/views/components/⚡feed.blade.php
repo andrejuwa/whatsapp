@@ -10,11 +10,7 @@ new class extends Component {
     {
         $this->visualizar($contatoSelecionado);
         $this->contatoSelecionado = $contatoSelecionado;
-        \App\Services\AtualizarRegistrosService::atualizarContatos();
 
-        $ultimaMensagem = \App\Models\Mensagem::query()->latest()->first();
-
-        $total = \App\Services\AtualizarRegistrosService::atualizarMensagens($ultimaMensagem->whatsapp_id);
 
         $mensagens = \App\Models\Mensagem::query()
             ->limit(50)
