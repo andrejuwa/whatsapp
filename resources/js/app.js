@@ -1,5 +1,80 @@
 window._lastScrollCancel = 0;
 
+window.enviarTemplate = async function (
+    btn,
+    nome,
+    texto = null,
+    media_id = null,
+    contact_wa_id = null,
+    tipo = null,
+    ativo = null
+) {
+    let wa_id = document.getElementById('wa_id').value;
+
+    let body = {};
+
+        body.mensagem = texto;
+    if (tipo === 'texto') {
+    } else if (tipo === 'contacts') {
+        body.contact_id = contact_wa_id;
+    } else {
+        body.media_id = media_id;
+    }
+
+    // 👉 salva estado original
+    const textoOriginal = btn.innerHTML;
+
+    // 👉 ativa loading
+    btn.disabled = true;
+    btn.innerHTML = 'Enviando...';
+    btn.classList.remove('bg-indigo-600');
+    btn.classList.add('bg-blue-50');
+
+    try {
+        const response = await fetch(
+            `http://admin.recargahouse.site/api/api/whatsapp/enviarMensagem/${wa_id}/${tipo}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                },
+                body: JSON.stringify(body)
+            }
+        );
+
+        const data = await response.json();
+        console.log(data);
+
+    } catch (error) {
+        console.error('Erro ao enviar:', error);
+    } finally {
+        // 👉 volta ao normal independente de sucesso ou erro
+        btn.disabled = false;
+        btn.innerHTML = textoOriginal;
+
+        btn.classList.add('bg-indigo-600');
+        btn.classList.remove('bg-blue-50');
+    }
+};
+
+window.gerarDesconto = async function (produtoId) {
+    let wa_id = document.getElementById('wa_id').value;
+    const url ='https://admin.recargahouse.site';
+    const url2 ='http://localhost:8001';
+    const response = await fetch(
+        url2+`/api/api/whatsapp/gerarDesconto/${wa_id}/${produtoId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+            }
+        }
+    );
+};
 window.arquivar = function () {
     const ul = document.querySelector('#listagemMensagem');
     const ultimoLi = ul.lastElementChild;

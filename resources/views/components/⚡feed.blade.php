@@ -5,11 +5,13 @@ use Livewire\Component;
 new class extends Component {
     public $mensagens;
     public $contatoSelecionado;
+    public $templates;
 
     public function mount($contatoSelecionado)
     {
         $this->visualizar($contatoSelecionado);
         $this->contatoSelecionado = $contatoSelecionado;
+        $this->templates = \App\Models\Template::query()->where('ativo', true)->get();
 
 
         $mensagens = \App\Models\Mensagem::query()
@@ -156,6 +158,7 @@ new class extends Component {
                 >
                     Arquivar
                 </button>
+                <button type="button" command="show-modal" commandfor="dialog" class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20">Open dialog</button>
             </form>
         </div>
     </div>
@@ -175,4 +178,42 @@ new class extends Component {
         </li>
     </template>
     <input type="hidden" id="wa_id" value="{{ $this->contatoSelecionado->wa_id }}">
+    <!-- Include this script tag or install `@tailwindplus/elements` via npm: -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script> -->
+
+    <el-dialog>
+        <dialog id="dialog" aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+            <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in dark:bg-gray-900/50"></el-dialog-backdrop>
+
+            <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+                <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95 dark:bg-gray-800 dark:outline dark:-outline-offset-1 dark:outline-white/10">
+                    @foreach($this->templates as $template)
+                        <div class="mt-5 sm:mt-6">
+                            <button
+                                type="button"
+                                onclick="enviarTemplate(this,
+                            @if(!empty($template->nome)) '{{ $template->nome }}' @else '' @endif,
+                            @if(!empty($template->texto)) '{{ $template->texto }}' @else '' @endif,
+                            @if(!empty($template->media_id)) '{{ $template->media_id }}' @else '' @endif,
+                            @if(!empty($template->wa_id)) '{{ $template->wa_id }}' @else '' @endif,
+                            @if(!empty($template->tipo)) '{{ $template->tipo }}' @else '' @endif,
+                            @if(!empty($template->ativo)) '{{ $template->ativo }}' @else '' @endif
+                        )"
+                                class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white"
+                            >
+                                {{ $template->nome }}
+                            </button>
+                        </div>
+                    @endforeach
+                        <div class="mt-5 sm:mt-6">
+                            <button type="button" onclick="gerarDesconto('9da0baa6-7c63-43ef-be87-bfaee003cd99')" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Gerar Desconto</button>
+                        </div>
+                        <div class="mt-5 sm:mt-6">
+                            <button type="button" command="close" commandfor="dialog" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Cancelar</button>
+                        </div>
+                </el-dialog-panel>
+            </div>
+        </dialog>
+    </el-dialog>
+
 </div>
