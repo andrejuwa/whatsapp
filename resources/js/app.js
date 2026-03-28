@@ -62,9 +62,8 @@ window.enviarTemplate = async function (
 window.gerarDesconto = async function (produtoId) {
     let wa_id = document.getElementById('wa_id').value;
     const url ='https://admin.recargahouse.site';
-    const url2 ='http://localhost:8001';
     const response = await fetch(
-        url2+`/api/api/whatsapp/gerarDesconto/${wa_id}/${produtoId}`,
+        url+`/api/api/whatsapp/gerarDesconto/${wa_id}/${produtoId}`,
         {
             method: 'POST',
             headers: {
