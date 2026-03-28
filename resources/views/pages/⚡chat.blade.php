@@ -61,7 +61,8 @@ new class extends Component
                                                 $contato->ultimaMensagem->body == "aviso_vencimento_net_1" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_1" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_2" ||
-                                                $contato->ultimaMensagem->body == "venda_produtos_3"
+                                                $contato->ultimaMensagem->body == "venda_produtos_3" ||
+                                                $contato->ultimaMensagem->body == "parroumassa"
                                                 ){
                                                 $hidden = "display: none;";
                                             }
