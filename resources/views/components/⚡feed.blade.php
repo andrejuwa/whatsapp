@@ -130,6 +130,7 @@ new class extends Component {
                 >
                     Manual
                 </button>
+
                 <button
                     type="button"
                     class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
@@ -137,6 +138,16 @@ new class extends Component {
                 >
                     Automatizar
                 </button>
+
+                <button
+                    type="button"
+                    class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
+                    onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '1.2')"
+                >
+                    Enviar Contato
+                </button>
+
+
                 <button
                     type="button"
                     class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
