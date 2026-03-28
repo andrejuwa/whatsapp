@@ -206,7 +206,7 @@ import './echo';
 
 window.atualizarFlow = async function (wa_id, status) {
     try {
-        const response = await fetch(`https://admin.recargahouse.site/api/api/whatsapp/enviarMensagem/${wa_id}/${status}`, {
+        const response = await fetch(`https://admin.recargahouse.site/api/api/whatsapp/flow/${wa_id}/${status}`, {
             method: 'POST',
         });
         console.log(response)
