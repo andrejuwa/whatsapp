@@ -71,7 +71,7 @@ new class extends Component
                                             <a href="/contato/{{$contato->wa_id}}" class="">
 
                                                 {{ $contato->name ?? $contato->wa_id }} - {{ $contato->wa_id }}
-                                                <span id="wa_id_{{ $contato->wa_id }}" class="bg-green-100">{{ $contato->mensagens_nao_lida == 0 ? "": $contato->mensagens_nao_lida }}</span>
+                                                <span id="wa_id_{{ $contato->wa_id }}" class="bg-green-500">{{ $contato->mensagens_nao_lida == 0 ? "": $contato->mensagens_nao_lida }}</span>
                                             </a>
                                             <span>
                                                 {{ \Illuminate\Support\Str::limit(preg_replace('/[^A-Za-z0-9 ]/', '', $contato->ultimaMensagem->body), 20) }}
