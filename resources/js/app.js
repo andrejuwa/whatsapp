@@ -102,7 +102,7 @@ window.arquivar = function () {
         console.log(liId);
 
         // redireciona para um link, por exemplo passando o id
-        window.location.href = `${window.location.origin}/arquivar/${liId}`;
+        window.location.href = `https://whatsapp.recargahouse.site/arquivar/arquivar/${liId}`;
     }
 };
 window.scrollFinalSemPerguntar = function (element = null) {
