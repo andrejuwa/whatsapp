@@ -74,6 +74,26 @@ window.gerarDesconto = async function (produtoId) {
         }
     );
 };
+window.openSideBar = function () {
+    const feed = document.querySelector('#feed');
+    const sidebar = document.querySelector('#sidebar');
+    feed.style.display = "none"
+
+    sidebar.classList.remove(
+        'hidden'
+    )
+    sidebar.classList.add(
+        'fixed',
+        'inset-y-0',
+        'z-50',
+        'flex',
+        'w-72',
+        'flex-col',
+        'w-full'
+    );
+
+    alert('abc')
+};
 window.arquivar = function () {
     const ul = document.querySelector('#listagemMensagem');
     const ultimoLi = ul.lastElementChild;

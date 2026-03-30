@@ -39,44 +39,49 @@ new class extends Component {
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script> -->
     <ul role="list" class="space-y-6" id="listagemMensagem">
         @foreach($this->mensagens as $mensagem)
-            <li class="relative flex gap-x-4" id="{{$mensagem->whatsapp_id}}">
-                <input type="hidden" name="whatsapp_id">
-                <div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
-                    <div class="w-px bg-gray-200 dark:bg-white/15"></div>
-                </div>
-                <div class="relative flex size-6 flex-none items-center justify-center bg-white dark:bg-gray-900">
-                    <div
-                        class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300 dark:bg-white/10 dark:ring-white/20"></div>
-                </div>
-                @if($mensagem->enviado)
-                    <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400 bg-green-100">
-                        {!! nl2br(e($mensagem->body)) !!}
-                    </p>
-                    <time datetime="2023-01-23T10:32"
-                          class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">{{ $mensagem->timestamp }}</time>
-                @else
-                    <time datetime="2023-01-23T10:32" class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">
-                        {{ $mensagem->timestamp }}
-                    </time>
-                    @if($mensagem->type == "text")
-                        <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">
+            <li class="flex {{ $mensagem->enviado ? 'justify-end' : 'justify-start' }} mb-2">
+
+                <div class="max-w-[70%] break-all">
+
+                    <div class="px-3 py-2 rounded-lg text-sm
+            {{ $mensagem->enviado
+                ? 'bg-green-500 text-white rounded-br-none'
+                : 'bg-gray-200 text-gray-900 rounded-bl-none' }}">
+
+                        @if($mensagem->type == "text")
                             {!! nl2br(e($mensagem->body)) !!}
-                        </p>
-                    @elseif($mensagem->type == "image")
-                        @php
-                        $imagem = "https://recargahouse.site/storage/" . $mensagem->body;
-                        @endphp
-                        <a href="{{ $imagem }}" class="btn bg-green-600 py-1 px-1 rounded" target="_blank" rel="noopener noreferrer">Ver Imagem</a>
-                    @elseif($mensagem->type == "interactive")
-                        <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">
-                            {!! json_decode($mensagem->body)->id !!}
-                        </p>
-                    @else
-                        <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">
-                            {!! nl2br(e($mensagem->body)) !!} - {{ $mensagem->type }}
-                        </p>
-                    @endif
-                @endif
+
+                        @elseif($mensagem->type == "image")
+                            @php
+                                $imagem = "https://recargahouse.site/storage/" . $mensagem->body;
+                            @endphp
+                            <a href="{{ $imagem }}" target="_blank">
+                                <img src="{{ $imagem }}" class="rounded max-h-60">
+                            </a>
+
+                        @elseif($mensagem->type == "interactive")
+                            {{ json_decode($mensagem->body)->id ?? '' }}
+
+                        @else
+                            {!! nl2br(e($mensagem->body)) !!}
+                        @endif
+                    </div>
+
+                    @php
+                        $data = \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $mensagem->timestamp);
+                    @endphp
+
+                    <div class="text-[10px] text-gray-400 mt-1 {{ $mensagem->enviado ? 'text-right' : 'text-left' }}">
+                        @if($data->isToday())
+                            {{ $data->format('H:i') }}
+                        @elseif($data->isYesterday())
+                            Ontem {{ $data->format('H:i') }}
+                        @else
+                            {{ $data->format('d/m H:i') }}
+                        @endif
+                    </div>
+
+                </div>
 
             </li>
         @endforeach
