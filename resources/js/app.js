@@ -92,7 +92,6 @@ window.openSideBar = function () {
         'w-full'
     );
 
-    alert('abc')
 };
 window.arquivar = function () {
     const ul = document.querySelector('#listagemMensagem');
