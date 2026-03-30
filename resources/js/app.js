@@ -100,7 +100,6 @@ window.arquivar = function () {
     if (ultimoLi) {
         const liId = ultimoLi.id;
         console.log(liId);
-        alert(liId)
 
         // redireciona para um link, por exemplo passando o id
         window.location.href = `/arquivar/${liId}`;
