@@ -39,7 +39,7 @@ new class extends Component {
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script> -->
     <ul role="list" class="space-y-6" id="listagemMensagem">
         @foreach($this->mensagens as $mensagem)
-            <li class="flex {{ $mensagem->enviado ? 'justify-end' : 'justify-start' }} mb-2">
+            <li class="flex {{ $mensagem->enviado ? 'justify-end' : 'justify-start' }} mb-2" id="{{ $mensagem->whatsapp_id }}">
 
                 <div class="max-w-[70%] break-all">
 

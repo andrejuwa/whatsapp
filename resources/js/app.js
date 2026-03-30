@@ -100,9 +100,10 @@ window.arquivar = function () {
     if (ultimoLi) {
         const liId = ultimoLi.id;
         console.log(liId);
+        alert(liId)
 
         // redireciona para um link, por exemplo passando o id
-        window.location.href = `https://whatsapp.recargahouse.site/arquivar/arquivar/${liId}`;
+        window.location.href = `/arquivar/${liId}`;
     }
 };
 window.scrollFinalSemPerguntar = function (element = null) {
