@@ -114,14 +114,13 @@ new class extends Component {
             <form action="#" class="relative flex-auto">
                 <div
                     class="overflow-hidden rounded-lg outline-1 outline-gray-300 focus-within:outline-2 focus-within:outline-indigo-600 dark:bg-white/5">
-        <textarea
-            id="comentario"
-            rows="5"
-            placeholder="Add your comment..."
-            class="block w-full resize-none bg-transparent px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:outline-none"
-        ></textarea>
+                    <textarea
+                        id="comentario"
+                        rows="5"
+                        placeholder="Add your comment..."
+                        class="block w-full resize-none bg-transparent px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:outline-none"
+                    ></textarea>
                 </div>
-
                 <button
                     type="button"
                     id="btnEnviar"
@@ -130,40 +129,43 @@ new class extends Component {
                 >
                     Enviar
                 </button>
-                <button
-                    type="button"
-                    class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
-                    onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, 'manual')"
-                >
-                    Manual
-                </button>
 
-                <button
-                    type="button"
-                    class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
-                    onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '0')"
-                >
-                    Automatizar
-                </button>
+                <div id="actions">
+                    <button
+                        type="button"
+                        class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
+                        onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, 'manual')"
+                    >
+                        Manual
+                    </button>
 
-
-                <button
-                    type="button"
-                    class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
-                    onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '1.2')"
-                >
-                    Enviar Contato
-                </button>
+                    <button
+                        type="button"
+                        class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
+                        onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '0')"
+                    >
+                        Automatizar
+                    </button>
 
 
-                <button
-                    type="button"
-                    class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
-                    onclick="arquivar()"
-                >
-                    Arquivar
-                </button>
-                <button type="button" command="show-modal" commandfor="dialog" class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20">Open dialog</button>
+                    <button
+                        type="button"
+                        class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
+                        onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '1.2')"
+                    >
+                        Enviar Contato
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
+                        onclick="arquivar()"
+                    >
+                        Arquivar
+                    </button>
+                    <button type="button" command="show-modal" commandfor="dialog" class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20">Open dialog</button>
+                </div>
             </form>
         </div>
     </div>

@@ -190,6 +190,15 @@ const textarea = document.getElementById('comentario');
 const MIN_ROWS = 5;
 const MAX_ROWS = 15;
 
+textarea.addEventListener('focus', () => {
+    const outraDiv = document.getElementById('actions');
+    outraDiv.classList.add('hidden');
+});
+textarea.addEventListener('blur', () => {
+    const outraDiv = document.getElementById('actions');
+    outraDiv.classList.remove('hidden');
+});
+
 function autoResize(el) {
     if (!el) return;
 
