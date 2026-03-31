@@ -17,33 +17,123 @@ window.Echo = new Echo({
 
 window.Echo.channel('MensagemRecebidaWhatsapp')
     .listen('MensagemRecebidaWhatsapp', (e) => {
+
         let wa_id = document.getElementById('wa_id');
         if (wa_id) {
-            wa_id = wa_id.value
+            wa_id = wa_id.value;
         }
 
+        // 👉 Se for o chat aberto
         if (e.message.from == wa_id) {
-            echoMensagem(e)
-        }else{
+            renderMensagem(e.message);
+        } else {
             const el = document.getElementById("contato_" + e.message.from);
 
             if (el) {
                 el.style = "";
             }
+
             if (!e.message?.enviado) {
 
-                const span = document.getElementById("wa_id_"+e.message.from);
-                const spanUltimaMensagem = document.getElementById("ultima_mensagem_wa_id_"+e.message.from);
+                const span = document.getElementById("wa_id_" + e.message.from);
+                const spanUltimaMensagem = document.getElementById("ultima_mensagem_wa_id_" + e.message.from);
 
-
-                let valor = parseInt(span.textContent) || 0; // se estiver vazio, vira 0
-
+                let valor = parseInt(span.textContent) || 0;
                 valor += 1;
+
                 span.classList.remove('hidden');
                 span.textContent = valor;
-                spanUltimaMensagem.textContent = e.message.body.replace(/[^A-Za-z0-9 ]/g, '') // remove caracteres especiais
+
+                spanUltimaMensagem.textContent = e.message.body
+                    ?.replace(/[^A-Za-z0-9 ]/g, '')
                     .substring(0, 20);
             }
         }
-
     });
+
+function renderMensagem(msg) {
+    const template = document.getElementById('templateMensagem');
+    const clone = template.content.cloneNode(true);
+
+    const li = clone.querySelector('li');
+    const box = clone.querySelector('.mensagem-box');
+    const body = clone.querySelector('.mensagem-body');
+    const time = clone.querySelector('.mensagem-time');
+
+    // 👉 Conteúdo
+    if (msg.type === 'image') {
+        const url = `/storage/${msg.body}`;
+        body.innerHTML = `<a href="${url}" target="_blank">
+            <img src="${url}" class="rounded max-h-60">
+        </a>`;
+    } else {
+        body.innerHTML = (msg.body || '').replace(/\n/g, '<br>');
+    }
+
+    // 👉 Hora (ajusta conforme seu formato)
+    time.innerText = formatarHora(msg.timestamp);
+
+    // 👉 Direção
+    if (msg.enviado) {
+        li.classList.add('justify-end');
+        box.classList.add('bg-green-500', 'text-white', 'rounded-br-none');
+    } else {
+        li.classList.add('justify-start');
+        box.classList.add('bg-gray-200', 'text-gray-900', 'rounded-bl-none');
+    }
+
+    document.getElementById('listagemMensagem').appendChild(clone);
+
+    // 👉 Scroll automático (opcional)
+    scrollFinalSemPerguntar();
+}
+
+function formatarHora(timestamp) {
+    if (!timestamp) return '';
+
+    let date;
+
+    // 🧠 Detecta formato automaticamente
+    if (typeof timestamp === 'string') {
+        // formato: "27/03/2026 14:32:10"
+        if (timestamp.includes('/')) {
+            const [data, hora] = timestamp.split(' ');
+            const [dia, mes, ano] = data.split('/');
+            date = new Date(`${ano}-${mes}-${dia}T${hora}`);
+        } else {
+            // ISO string
+            date = new Date(timestamp);
+        }
+
+    } else if (typeof timestamp === 'number') {
+        // Unix timestamp (segundos ou ms)
+        date = timestamp < 9999999999
+            ? new Date(timestamp * 1000)
+            : new Date(timestamp);
+
+    } else {
+        // já é Date ou outro formato
+        date = new Date(timestamp);
+    }
+
+    if (isNaN(date)) return '';
+
+    const agora = new Date();
+    const ontem = new Date();
+    ontem.setDate(agora.getDate() - 1);
+
+    const isHoje = date.toDateString() === agora.toDateString();
+    const isOntem = date.toDateString() === ontem.toDateString();
+
+    const hora = date.toTimeString().substring(0, 5);
+
+    if (isHoje) {
+        return hora;
+    } else if (isOntem) {
+        return `Ontem ${hora}`;
+    } else {
+        const dia = String(date.getDate()).padStart(2, '0');
+        const mes = String(date.getMonth() + 1).padStart(2, '0');
+        return `${dia}/${mes} ${hora}`;
+    }
+}
