@@ -21,6 +21,7 @@ window.Echo.channel('MensagemRecebidaWhatsapp')
         if (wa_id) {
             wa_id = wa_id.value
         }
+
         if (e.message.from == wa_id) {
             echoMensagem(e)
         }else{
@@ -29,16 +30,19 @@ window.Echo.channel('MensagemRecebidaWhatsapp')
             if (el) {
                 el.style = "";
             }
-
-            if(e.message.enviado == true){
+            if (!e.message?.enviado) {
 
                 const span = document.getElementById("wa_id_"+e.message.from);
+                const spanUltimaMensagem = document.getElementById("ultima_mensagem_wa_id_"+e.message.from);
 
 
                 let valor = parseInt(span.textContent) || 0; // se estiver vazio, vira 0
 
                 valor += 1;
+                span.classList.remove('hidden');
                 span.textContent = valor;
+                spanUltimaMensagem.textContent = e.message.body.replace(/[^A-Za-z0-9 ]/g, '') // remove caracteres especiais
+                    .substring(0, 20);
             }
         }
 

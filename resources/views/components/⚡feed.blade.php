@@ -9,7 +9,6 @@ new class extends Component {
 
     public function mount($contatoSelecionado)
     {
-        $this->visualizar($contatoSelecionado);
         $this->contatoSelecionado = $contatoSelecionado;
         $this->templates = \App\Models\Template::query()->where('ativo', true)->get();
 
@@ -23,13 +22,6 @@ new class extends Component {
 
         $this->mensagens = $mensagens->sortBy('timestamp');
 
-    }
-
-    public function visualizar($contatoSelecionado): void
-    {
-        if ($contatoSelecionado->mensagens_nao_lida > 0){
-            \App\Services\AtualizarRegistrosService::visualizarMensagens($contatoSelecionado->wa_id);
-        }
     }
 };
 ?>

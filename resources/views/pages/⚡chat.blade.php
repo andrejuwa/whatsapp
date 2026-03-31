@@ -11,6 +11,7 @@ new class extends Component
     {
         if (!empty($waId)){
             $this->contatoSelecionado = \App\Models\Contato::query()->where('wa_id', $waId)->first();
+            \App\Services\AtualizarRegistrosService::visualizarMensagens($this->contatoSelecionado->wa_id);
         }
         \App\Services\AtualizarRegistrosService::atualizarContatos();
 
@@ -67,16 +68,31 @@ new class extends Component
                                                 $hidden = "display: none;";
                                             }
                                         @endphp
-                                        <li  class="group  gap-x-3 rounded-md {{$bg}} p-2 text-sm/6 font-semibold @if(1 == 2) text-indigo-600 @endif dark:text-white" style="{{ $hidden }}" id="contato_{{$contato->wa_id}}">
-                                            <!-- Current: "bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white", Default: "text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5" -->
-                                            <a href="/contato/{{$contato->wa_id}}" class="">
+                                        <li onclick="window.location.href='/contato/{{$contato->wa_id}}'"
+                                            class="group gap-x-3 rounded-md {{$bg}} p-2 text-sm font-semibold dark:text-white hover:bg-green-200"
+                                            style="{{ $hidden }}"
+                                            id="contato_{{$contato->wa_id}}">
 
-                                                {{ $contato->name ?? $contato->wa_id }} - {{ $contato->wa_id }}<br>
-                                                <span id="wa_id_{{ $contato->wa_id }}" class="bg-green-500">{{ $contato->mensagens_nao_lida == 0 ? "": $contato->mensagens_nao_lida }}</span>
-                                            </a>
-                                            <span>
-                                                {{ \Illuminate\Support\Str::limit(preg_replace('/[^A-Za-z0-9 ]/', '', $contato->ultimaMensagem->body), 20) }}
-                                            </span>
+                                            <div class="flex flex-col">
+
+                                                <!-- Linha 1 -->
+                                                <div class="flex justify-between items-center">
+                                                    <span>
+                                                        {{ $contato->name ?? $contato->wa_id }}
+                                                    </span>
+
+                                                    <span id="wa_id_{{ $contato->wa_id }}" class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full {{ $contato->mensagens_nao_lida == 0 ? 'hidden' : '' }}">
+                                                        {{ $contato->mensagens_nao_lida }}
+                                                    </span>
+                                                </div>
+
+                                                <!-- Linha 2 -->
+                                                <div id="ultima_mensagem_wa_id_{{ $contato->wa_id }}"
+                                                     class="text-gray-500 text-sm truncate">
+                                                    {{ \Illuminate\Support\Str::limit(preg_replace('/[^A-Za-z0-9 ]/', '', $contato->ultimaMensagem->body), 40) }}
+                                                </div>
+
+                                            </div>
                                         </li>
                                     @endforeach
                                 </ul>

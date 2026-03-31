@@ -190,14 +190,7 @@ const textarea = document.getElementById('comentario');
 const MIN_ROWS = 5;
 const MAX_ROWS = 15;
 
-textarea.addEventListener('focus', () => {
-    const outraDiv = document.getElementById('actions');
-    outraDiv.classList.add('hidden');
-});
-textarea.addEventListener('blur', () => {
-    const outraDiv = document.getElementById('actions');
-    outraDiv.classList.remove('hidden');
-});
+
 
 function autoResize(el) {
     if (!el) return;
@@ -223,6 +216,15 @@ function autoResize(el) {
 }
 
 if (textarea) {
+    textarea.addEventListener('focus', () => {
+        const outraDiv = document.getElementById('actions');
+        outraDiv.classList.add('hidden');
+    });
+    textarea.addEventListener('blur', () => {
+        const outraDiv = document.getElementById('actions');
+        outraDiv.classList.remove('hidden');
+    });
+
     textarea.addEventListener('input', function () {
         autoResize(this);
     });
@@ -374,4 +376,13 @@ window.echoMensagem = function (e) {
 
 document.addEventListener("DOMContentLoaded", function() {
     scrollFinalSemPerguntar();
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isHome = window.location.pathname === '/';
+
+    if (isMobile && isHome) {
+        openSideBar();
+    }
+
+
 });
