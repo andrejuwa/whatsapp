@@ -163,7 +163,7 @@ new class extends Component
         </a>
     </div>
 
-    <main class="py-10 lg:pl-72">
+    <main class="py-10 lg:pl-[32%]">
         <div class="px-4 sm:px-6 lg:px-8" id="feed">
 
             @if(!empty($this->contatoSelecionado))

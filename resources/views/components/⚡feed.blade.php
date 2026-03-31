@@ -51,6 +51,9 @@ new class extends Component {
                                 <img src="{{ $imagem }}" class="rounded max-h-60">
                             </a>
 
+                        @elseif($mensagem->type == "template")
+                            {!! nl2br(e($mensagem->body)) !!}
+
                         @elseif($mensagem->type == "interactive")
                             {{ json_decode($mensagem->body)->id ?? '' }}
                         @elseif($mensagem->type == "audio")
@@ -61,8 +64,9 @@ new class extends Component {
                                 <source src="{{ $audio   }}" type="audio/ogg">
                                 Seu navegador não suporta áudio.
                             </audio>
+                        @elseif($mensagem->type == "button")
+                            {!! $mensagem->body !!}
                         @else
-                            {!! nl2br(e($mensagem->body)) !!}
                         @endif
                     </div>
 
