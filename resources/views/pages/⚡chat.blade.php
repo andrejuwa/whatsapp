@@ -25,7 +25,7 @@ new class extends Component
     public function carregarMensagens()
     {
         $this->contatos = \App\Services\ContatosService::getUltimosContatos();
-
+        $this->dispatch("post-updated");
     }
 };
 ?>
@@ -34,10 +34,19 @@ new class extends Component
 
 
     <!-- Static sidebar for desktop -->
-    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col dark:bg-gray-900" id="sidebar">
+    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-[32%] lg:flex-col dark:bg-gray-900" id="sidebar">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 dark:border-white/10 dark:bg-black/10">
             <div class="flex h-16 shrink-0 items-center">
+                <button
+                    wire:click="carregarMensagens"
+                    wire:loading.attr="disabled"
+                    class="ml-auto text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-medium hover:bg-blue-200">
+
+                    <span wire:loading.remove>Atualizar</span>
+                    <span wire:loading>Atualizando...</span>
+
+                </button>
                 <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="h-8 w-auto dark:hidden" />
                 <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="h-8 w-auto not-dark:hidden" />
             </div>
@@ -45,6 +54,34 @@ new class extends Component
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                     <li>
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                            <div class="flex gap-2 mb-3 overflow-x-auto">
+
+                                <button onclick="filtrar('conversas')"
+                                        class="aba whitespace-nowrap text-xs px-3 py-1 rounded-full bg-green-100 text-green-700 font-medium">
+                                    Conversas
+                                </button>
+
+                                <button onclick="filtrar('nao_lidos')"
+                                        class="aba whitespace-nowrap text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                    Não lidas
+                                </button>
+
+                                <button onclick="filtrar('arquivados')"
+                                        class="aba whitespace-nowrap text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                    Arquivadas
+                                </button>
+
+                                <button onclick="filtrar('campanhas')"
+                                        class="aba whitespace-nowrap text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                    Campanhas
+                                </button>
+
+                                <button onclick="filtrar('todos')"
+                                        class="aba whitespace-nowrap text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                    Todos
+                                </button>
+
+                            </div>
                             <li>
                                 <ul role="list" class="-mx-2 space-y-1">
                                     @foreach($this->contatos as $contato)
@@ -57,20 +94,20 @@ new class extends Component
                                                 $bg = "bg-green-500 dark:bg-white/5";
                                             }
 
-                                            if (
-                                                $contato->ultimaMensagem->mensagem_arquivada == 1 ||
+                                            $isCampanha =
                                                 $contato->ultimaMensagem->body == "aviso_vencimento_net_1" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_1" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_2" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_3" ||
-                                                $contato->ultimaMensagem->body == "parrou_massa"
-                                                ){
-                                                $hidden = "display: none;";
-                                            }
+                                                $contato->ultimaMensagem->body == "parrou_massa";
                                         @endphp
-                                        <li onclick="window.location.href='/contato/{{$contato->wa_id}}'"
-                                            class="group gap-x-3 rounded-md {{$bg}} p-2 text-sm font-semibold dark:text-white hover:bg-green-200"
-                                            style="{{ $hidden }}"
+                                        <li
+                                            onclick="window.location.href='/contato/{{$contato->wa_id}}'"
+                                            class="contato group gap-x-3 rounded-md {{$bg}} p-2 text-sm font-semibold dark:text-white hover:bg-green-200"
+
+                                            data-nao-lida="{{ $contato->mensagens_nao_lida > 0 ? '1' : '0' }}"
+                                            data-arquivado="{{ $contato->ultimaMensagem->mensagem_arquivada == 1 ? '1' : '0' }}"
+                                            data-campanha="{{ $isCampanha ? '1' : '0' }}"
                                             id="contato_{{$contato->wa_id}}">
 
                                             <div class="flex flex-col">

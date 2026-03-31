@@ -386,3 +386,69 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 });
+
+window.filtrar = function (tipo){
+    const contatos = document.querySelectorAll('.contato');
+
+    contatos.forEach(contato => {
+        const naoLida = contato.dataset.naoLida === "1";
+        const arquivado = contato.dataset.arquivado === "1";
+        const campanha = contato.dataset.campanha === "1";
+
+        let mostrar = false;
+
+        switch (tipo) {
+            case 'conversas':
+                mostrar = !arquivado && !campanha;
+                break;
+
+            case 'nao_lidos':
+                mostrar = naoLida && !arquivado && !campanha;
+                break;
+
+            case 'arquivados':
+                mostrar = arquivado;
+                break;
+
+            case 'campanhas':
+                mostrar = campanha;
+                break;
+
+            case 'todos':
+                mostrar = true;
+                break;
+        }
+
+        contato.style.display = mostrar ? 'flex' : 'none';
+    });
+
+    atualizarAbaAtiva(tipo);
+}
+
+
+window.atualizarAbaAtiva = function (tipo){
+    const abas = document.querySelectorAll('.aba');
+
+    abas.forEach(btn => {
+        btn.classList.remove('bg-green-500', 'text-white');
+        btn.classList.add('bg-gray-200');
+    });
+
+    const mapa = {
+        'conversas': 0,
+        'nao_lidos': 1,
+        'arquivados': 2,
+        'campanhas': 3,
+        'todos': 4
+    };
+
+    const ativa = abas[mapa[tipo]];
+    if (ativa) {
+        ativa.classList.add('bg-green-500', 'text-white');
+    }
+}
+
+
+document.addEventListener('post-updated', () => {
+    filtrar('conversas');
+});

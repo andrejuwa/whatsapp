@@ -23,32 +23,68 @@ window.Echo.channel('MensagemRecebidaWhatsapp')
             wa_id = wa_id.value;
         }
 
-        // 👉 Se for o chat aberto
-        if (e.message.from == wa_id) {
-            renderMensagem(e.message);
-        } else {
-            const el = document.getElementById("contato_" + e.message.from);
+        const contatoId = e.message.from;
+        const el = document.getElementById("contato_" + contatoId);
 
-            if (el) {
-                el.style = "";
-            }
+        // 👉 Se for o chat aberto
+        if (contatoId == wa_id) {
+            renderMensagem(e.message);
+        }
+
+        if (el) {
+
+            const campanhas = [
+                "aviso_vencimento_net_1",
+                "venda_produtos_1",
+                "venda_produtos_2",
+                "venda_produtos_3",
+                "parrou_massa"
+            ];
+
+            const body = e.message.body || '';
+            const isCampanha = campanhas.includes(body);
+
+            // 👉 Atualiza campanha
+            el.dataset.campanha = isCampanha ? "1" : "0";
 
             if (!e.message?.enviado) {
 
-                const span = document.getElementById("wa_id_" + e.message.from);
-                const spanUltimaMensagem = document.getElementById("ultima_mensagem_wa_id_" + e.message.from);
+                // 🔥 DESARQUIVA AUTOMATICAMENTE
+                el.dataset.arquivado = "0";
 
-                let valor = parseInt(span.textContent) || 0;
-                valor += 1;
+                // 👉 Marca como não lida
+                el.dataset.naoLida = "1";
 
-                span.classList.remove('hidden');
-                span.textContent = valor;
+                const span = document.getElementById("wa_id_" + contatoId);
+                const spanUltimaMensagem = document.getElementById("ultima_mensagem_wa_id_" + contatoId);
 
-                spanUltimaMensagem.textContent = e.message.body
-                    ?.replace(/[^A-Za-z0-9 ]/g, '')
-                    .substring(0, 20);
+                if (span) {
+                    let valor = parseInt(span.textContent) || 0;
+                    valor += 1;
+
+                    span.classList.remove('hidden');
+                    span.textContent = valor;
+                }
+
+                if (spanUltimaMensagem) {
+                    spanUltimaMensagem.textContent = body
+                        .replace(/[^A-Za-z0-9 ]/g, '')
+                        .substring(0, 20);
+                }
             }
+
+            // 👉 Remove campanha se não for mais
+            if (!isCampanha) {
+                el.dataset.campanha = "0";
+            }
+
+            // 👉 Move pro topo
+            el.parentNode.prepend(el);
         }
+
+        // 🔁 Reaplica filtro atual
+        const abaAtual = localStorage.getItem('aba') || 'conversas';
+        filtrar(abaAtual);
     });
 
 function renderMensagem(msg) {
