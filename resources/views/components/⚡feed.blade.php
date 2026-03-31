@@ -135,26 +135,8 @@ new class extends Component {
                         class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
                         onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, 'manual')"
                     >
-                        Manual
+                        Atendimento Manual
                     </button>
-
-                    <button
-                        type="button"
-                        class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
-                        onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '0')"
-                    >
-                        Automatizar
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
-                        onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '1.2')"
-                    >
-                        Enviar Contato
-                    </button>
-
 
                     <button
                         type="button"
@@ -163,7 +145,7 @@ new class extends Component {
                     >
                         Arquivar
                     </button>
-                    <button type="button" command="show-modal" commandfor="dialog" class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20">Open dialog</button>
+                    <button type="button" command="show-modal" commandfor="dialog" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">Mais Opções</button>
                 </div>
             </form>
         </div>
@@ -209,6 +191,15 @@ new class extends Component {
                             </button>
                         </div>
                     @endforeach
+                        <div class="mt-5 sm:mt-6">
+                            <button
+                                type="button"
+                                class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                onclick="atualizarFlow({{ $this->contatoSelecionado->wa_id }}, '0')"
+                            >
+                                Automatizar
+                            </button>
+                        </div>
                         <div class="mt-5 sm:mt-6">
                             <button type="button" onclick="gerarDesconto('9da0baa6-7c63-43ef-be87-bfaee003cd99')" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Gerar Desconto</button>
                         </div>
