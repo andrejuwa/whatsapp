@@ -53,7 +53,14 @@ new class extends Component {
 
                         @elseif($mensagem->type == "interactive")
                             {{ json_decode($mensagem->body)->id ?? '' }}
-
+                        @elseif($mensagem->type == "audio")
+                            @php
+                                $audio = "https://recargahouse.site/storage/" . $mensagem->body;
+                            @endphp
+                            <audio controls>
+                                <source src="{{ $audio   }}" type="audio/ogg">
+                                Seu navegador não suporta áudio.
+                            </audio>
                         @else
                             {!! nl2br(e($mensagem->body)) !!}
                         @endif
