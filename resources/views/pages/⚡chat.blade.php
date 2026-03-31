@@ -54,7 +54,7 @@ new class extends Component
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                     <li>
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
-                            <div class="flex gap-2 mb-3 overflow-x-auto">
+                            <div class="flex gap-2 mb-3 overflow-x-auto min-h-15 pb-5">
 
                                 <button onclick="filtrar('conversas')"
                                         class="aba whitespace-nowrap text-xs px-3 py-1 rounded-full bg-green-100 text-green-700 font-medium">
