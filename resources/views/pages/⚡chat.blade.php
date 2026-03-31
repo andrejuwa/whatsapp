@@ -99,7 +99,8 @@ new class extends Component
                                                 $contato->ultimaMensagem->body == "venda_produtos_1" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_2" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_3" ||
-                                                $contato->ultimaMensagem->body == "parrou_massa";
+                                                $contato->ultimaMensagem->body == "parrou_massa" ||
+                                                $contato->ultimaMensagem->body == "captar_leads";
                                         @endphp
                                         <li
                                             onclick="window.location.href='/contato/{{$contato->wa_id}}'"

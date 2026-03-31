@@ -38,7 +38,8 @@ window.Echo.channel('MensagemRecebidaWhatsapp')
                 "venda_produtos_1",
                 "venda_produtos_2",
                 "venda_produtos_3",
-                "parrou_massa"
+                "parrou_massa",
+                "captar_leads"
             ];
 
             const body = e.message.body || '';
