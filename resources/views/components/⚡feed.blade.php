@@ -16,11 +16,12 @@ new class extends Component {
         $mensagens = \App\Models\Mensagem::query()
             ->limit(50)
             ->where('from', $contatoSelecionado->wa_id)
-            ->orderBy('timestamp', 'desc')
+            ->selectRaw("*, STR_TO_DATE(timestamp, '%d/%m/%Y %H:%i:%s') AS data_convertida")
+            ->orderBy('data_convertida', 'desc')
             ->get();
 
 
-        $this->mensagens = $mensagens->sortBy('timestamp');
+        $this->mensagens = $mensagens->sortBy('data_convertida');
 
     }
 };
