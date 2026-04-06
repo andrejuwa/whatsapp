@@ -39,7 +39,8 @@ window.Echo.channel('MensagemRecebidaWhatsapp')
                 "venda_produtos_2",
                 "venda_produtos_3",
                 "parrou_massa",
-                "captar_leads"
+                "captar_leads",
+                "campanha_nexa_tv"
             ];
 
             const body = e.message.body || '';

@@ -100,6 +100,7 @@ new class extends Component
                                                 $contato->ultimaMensagem->body == "venda_produtos_2" ||
                                                 $contato->ultimaMensagem->body == "venda_produtos_3" ||
                                                 $contato->ultimaMensagem->body == "parrou_massa" ||
+                                                $contato->ultimaMensagem->body == "campanha_nexa_tv" ||
                                                 $contato->ultimaMensagem->body == "captar_leads";
                                         @endphp
                                         <li
